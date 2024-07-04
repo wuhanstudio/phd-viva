@@ -1,0 +1,26 @@
+version: "3.3"
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    volumes:
+      - ./docs:/usr/share/nginx/html
+      - ./nginx.conf:/etc/nginx/nginx.conf
+    deploy:
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.viva.rule=Host(`viva.wuhanstudio.uk`)"
+        - "traefik.http.routers.viva.entrypoints=web"
+        - "traefik.http.services.viva.loadbalancer.server.port=80"
+        # TLS
+        - "traefik.http.routers.vivas.rule=Host(`viva.wuhanstudio.uk`)"
+        - "traefik.http.routers.vivas.entrypoints=websecure"
+        - "traefik.http.routers.vivas.tls.certresolver=myhttpchallenge"
+        # Redirect
+        - "traefik.http.routers.viva.middlewares=https_redirect"
+        - "traefik.http.middlewares.https_redirect.redirectscheme.scheme=https"
+    networks:
+      - traefik-public
+networks:
+  traefik-public:
+    external: true
