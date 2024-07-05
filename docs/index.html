@@ -32,8 +32,6 @@
                     <span class="menu-title" style="display: none">Title</span>
                     <h3>Is Deep Learning Secure?</h3>
                     <p class="blockquote-footer name" style="font-size: 25px;">Han Wu, University of Exeter</p>
-                    <!-- <h3 class="r-fit-text">Practical Adversarial Attacks and Interpretation Methods for Deep Learning Models</h3> -->
-
                 </section>
 
                 <section data-auto-animate data-banner="Practical Adversarial Attacks and Interpretation Methods for Deep Learning Models">
@@ -44,15 +42,15 @@
                      </div>
                     <div class="row">
                         <div class="col col-3 fragment" data-fragment-index="4">
-                            <img class="thumbnail" src="images/drivings.png"></img>
+                            <a href="#/4"><img class="thumbnail" src="images/drivings.png"></img></a>
                             <p class="proj">Chapter 2</p>
                         </div>
                         <div class="col col-3 fragment" data-fragment-index="2">
-                            <img class="thumbnail" src="images/detections.png"></img>
+                            <a href="#/15"><img class="thumbnail" src="images/detections.png"></img></a>
                             <p class="proj">Chapter 3</p>
                         </div>
                         <div class="col col-3 fragment" data-fragment-index="3">
-                            <img class="thumbnail" src="images/minms.png"></img>
+                            <a href="#/23"><img class="thumbnail" src="images/minms.png"></img></a>
                             <p class="proj">Chapter 3</p>
                         </div>
                         <div class="col col-3 fragment" data-fragment-index="5">
@@ -66,14 +64,14 @@
                         </div>
                         <div class="col col-3 fragment" data-fragment-index="6">
                             <p class="proj-title"><strong>Black-box Attacks</strong></p>
-                            <img class="thumbnail" src="images/iots.png"></img>
+                            <a href="#/27"><img class="thumbnail" src="images/iots.png"></img></a>
                             <p class="proj">Chapter 5</p>
                         </div>
                         <div class="col col-2">
                         </div>
                         <div class="col col-3 fragment" data-fragment-index="7">
                             <p class="proj-title"><strong>Interpretation Methods</strong></p>
-                            <img class="thumbnail" src="images/covids.png"></img>
+                            <a href="#/39"><img class="thumbnail" src="images/covids.png"></img></a>
                             <p class="proj">Chapter 6</p>
                         </div>
                         <div class="col col-2">
@@ -82,6 +80,518 @@
 
                     <aside class="notes">
                     </aside>
+                </section>
+
+                <section data-menu-title="Chapter 2: Adversarial Driving" data-transition="slide-in fade-out">
+                    <h3>Chapter 2: Adversarial Driving</h3>
+                    <p class="" data-fragment-index="1" style="color: blue; font-size: 20px;"> Attacking End-to-End Driving Models &nbsp; <a href="https://ieeexplore.ieee.org/document/10186386"><i class="far fa-file-pdf"></i></a></p>
+                    <div class="r-vstack">
+                        <img class="" width="40%" src="images/overview.png">
+                    </div>
+                    <p style="font-size: 22px;"><i class="fab fa-github"></i> &nbsp; <a href="https://github.com/wuhanstudio/adversarial-driving">Source Code</a></p>
+                    <aside class="notes">
+                    </aside>
+                </section>
+
+                <section>
+                    <h4>Problem Definition</h4>
+                    <ul style="font-size: 25px;">
+                        <li>Given an input image 𝑥 and the end-to-end driving model $ y = f(\theta, x) $.</li>
+                        <li>Our objective is to generate an adversarial image $ x^{'} = x + \eta $ such that:</li>
+                        
+                        $$ y^{'}=f(𝜃,x^{'}) \neq y $$
+
+                        <li>To ensure that the perturbation is unperceivable to human eyes:</li>
+                        
+                        $$ \Vert x^{'}-x \Vert_2  = \Vert{\ \eta\ }\Vert_2 \leq \xi, \text{where } \xi=0.03 $$
+
+                        <li>For <strong>offline attacks</strong>, we can use pre-recorded human drivers' steering angles as the ground truth $y^*$.</li>
+
+                        $$ \eta = \epsilon\ sign(\nabla_x  J(y,\ y^{*} )) $$
+
+                        <li>For a real-time <strong>online attack</strong>, we do not have access to the ground truth $y^*$.</li>
+                        
+                        $$ \eta = \epsilon\ sign(\nabla_x  J(y)) $$
+                    </ul>
+                </section>
+
+                <section data-background-video="images/no_attack.mp4" data-background-video data-background-video-muted data-menu-title="Demo: No Attack">
+                    <aside class="notes">
+                        It is unsafe to attack a real autonomous driving car. We first tested our attacks in a autonomous driving simulator. Here we have the NVIDIA end-to-end driving model which was tested on a real autonomous driving car. The driving model takes image from the camera as input and outputs the steering angle directly.
+                    </aside>
+                </section>
+
+                <section data-menu-title="Random Nosises">
+                    <h2>Random Noises</h2>
+                    <aside class="notes">
+                        Before applying our attacks, we apply random noises to the input image. 
+                    </aside>
+                </section>
+
+                <section data-background-video="images/random_noise.mp4" data-background-video data-background-video-muted data-menu-title="Demo: Random Noises">
+                    <aside class="notes">
+                        As you can see here, after applying random noises, the output steering angle with and without random noises overlap with each other. They are very close. As a result, random noises have little effect on the end-to-end driving model.
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>Image-Specific Attack</h3>
+                    <br />
+                    <div class="r-hstack">
+                        <div class="r-vstack" style="margin-right: 60px;">
+                            <ul style="font-size: 25px;">
+                                <li> Output: Steering Angle 𝑦∈[-1, 1] </li>
+                                <li > Decrease the output (left): </li>
+                                $$ J_{left}(y)= - y $$
+                                <li> Increase the output (right): </li>
+                                $$ J_{left}(y)= y $$
+                            </ul>
+                        </div>
+                        <img src="images/driving-specific.png" width="50%" alt=""/>
+                    </div>
+                    <aside class="notes">
+                        We propose two online white-box adversarial attacks against the end-to-end driving model. We attack the driving model by applying adversarial perturbations to the input image.
+                    </aside>
+                </section>
+
+                <section data-background-video="images/image_specific.mp4" data-background-video data-background-video-muted data-menu-title="Demo: Image-Specific Attack">
+                    <aside class="notes">
+                        The image-specfic attack generates adversarial perturbations for each input image. This is a very strong attack. As you can see here, the vehicle gets out of control immediately after applying the adversarial perturbations.
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>Image-Agnostic Attack</h3>
+                    <img src="images/driving-agnostic.png" width="50%" alt=""/>
+                    <aside class="notes">
+                        On the other hand, the image-agnostic attack generates a single adversarial perturbations that attacks all input images.
+                    </aside>
+                </section>
+                
+                <section data-background-video="images/image_agnostic.mp4" data-background-video data-background-video-muted data-menu-title="Demo: Image-Agnostic Attack">
+                    <aside class="notes">
+                        The image-agnostic attack is like an invisible force that makes the vehicle difficult to make a turn at corners, which could cause traffic accidents at some critical points. Like this one. That was close, isn't it?
+                    </aside>
+                </section>
+
+                <section>
+                    <img src="images/ros.png" alt="">
+                </section>
+
+                <section>
+                    <img src="images/driving-exp.png" alt="">
+                </section>
+
+                <section data-menu-title="Chapter 3: Adversarial Detection">
+                    <h3>Chapter 3: Adversarial Detection</h3>
+                    <p class="" data-fragment-index="1" style="color: blue; font-size: 20px;"> Attacking Object Detection in Real Time  &nbsp; <a href="https://arxiv.org/abs/2209.01962"><i class="far fa-file-pdf"></i></a></p>
+                    <div class="r-vstack">
+                        <img class="" width="30%" src="images/attack.png">
+                    </div>
+                    <p style="font-size: 22px;"><i class="fab fa-github"></i> &nbsp; <a href="https://github.com/wuhanstudio/adversarial-detection">Source Code</a></p>
+                    <aside class="notes">
+                    </aside>
+                </section>
+
+                <section data-menu-title="Adversarial Overlay">
+                    <div class="r-vstack">
+                        <div class="" style="margin-bottom: 0;">
+                            <img src="images/digital_filter.jpg" style="margin-top:0; margin-bottom: 0;" width="85%" />
+                            <p style="font-size: 22px; margin-top: 0; margin-bottom: 10px;">Adversarial Filter</p>
+                            <img src="images/physical_patch.jpg" style="margin-top:0; margin-bottom: 0;" width="85%" />
+                            <p style="font-size: 22px; margin-top: 0; margin-bottom: 20px;">Adversarial Patch</p>
+                        </div>
+                        <div class="fragment">
+                            <img src="images/overlay.jpg" style="margin-top:0; margin-bottom: 0;" width="53%" />
+                            <p style="font-size: 22px; margin-top: 0; margin-bottom: 0;">Adversarial Overlay</p>
+                        </div>
+                        <div class="fragment">
+                            <p style="font-size: 22px;">How different attacks apply the perturbation $\delta$ using  a binary mask $m \in \{0, 1\}^{wh}$</p>
+                            <p style="font-size: 20px;">
+                                $x^{'}_{filter} = x + \delta$ 
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                                $x^{'}_{overlay} = x + m \odot \delta$
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                                $x^{'}_{patch} = (1-m) \odot x + m \odot \delta$</p>
+                            </div>
+                        </div>
+
+                        <aside class="notes">
+                            Prior research used adversarial filter and adversarial patch to fool object detection models. <br/>
+                            <br />
+                            The Adversarial Filter applies the perturbation to the entire input image. The perturbation is unperceivable by human eyes. While the Adversarial Patch applies the perturbation to a small region of the input image, but the perturbation is perceivable by human eyes.  Besides, the adversarial patch can control where we fabricate objects, while the adversarial filter cannot.<br />
+                            <br />
+                            By combining adversarial filters' imperceptibility and adversarial patches' localizability, we generate adversarial overlays, which means we generate human unperceivable perturbation at a small region of the input image. Mathematically, we summarize how different methods apply the pertubation in different ways.
+                        </aside>
+                </section>
+
+                
+                <section data-background-video="images/gazebo.mp4" data-background-video data-background-video-muted data-menu-title="Demo: Adversarial Detection">
+                    <aside class="notes">
+                        Let's see a real-time demo. We tested our attacks in ROS Gazebo Simulator. The obeject detection model seems to be stable. Now let's generate some traffic signs in the air. Interesting, isn't it?
+                    </aside>
+                </section>
+
+                <section data-menu-title="Adversarial Loss">
+                    <div style="text-align: left; font-size: 25px;">
+                        <p>Given an input image $x$, the object detection model outputs $S \times S$ candidate bounding boxes $o \in \mathcal{O}$ at three different scales.</p>
+                        <!-- <p>Given an input image $x$, the object detection model outputs $S \times S$ candidate bounding boxes $o \in \mathcal{O}$ at three different scales ($S \in \{13,26,52\}$, $B=3$, $|\mathcal{O}| = S \times S$). </p> -->
+                        <p>Each candidate box $o^i$ contains $(b_x^i, b_y^i, b_w^i, b_h^i, c^i, p_1^i, p_2^i, ..., p_K^i)$ for K classes, where $0 \leq i \leq |\mathcal{O}|$.</p>
+                    </div>
+                    <div class="r-vstack" style="font-size: 25px;">
+                        <p>
+                            $$\begin{aligned} \text{One-Targeted}:\ \mathcal{L}_{adv}^{1}(\mathcal{O}) &= \max_{1 \leq i \leq |\mathcal{O}|}\ [\sigma(c^i) * \sigma(p^i_t)] \\
+                            \text{Multi-Targeted}:\ \mathcal{L}_{adv}^{2}(\mathcal{O}) &= \sum^{|\mathcal{O}|}_{i = 1}\ [\sigma(c^i) * \sigma(p^i_t)] \\
+                            \text{Multi-Untargeted}:\ \mathcal{L}_{adv}^{3}(\mathcal{O}) &= \sum^{|\mathcal{O}|}_{i = 1} \sum_{j=1}^{K}\ [\sigma(c^i) *\sigma(p^i_j)] \end{aligned}$$
+                        </p>
+                    </div>
+                    <p style="text-align: left; font-size: 25px;">
+                        where $|\mathcal{O}| = \sum_{1 \leq i \leq 3} S_i \times S_i \times B$, and $S_i$ represents the grid size of the $i_{th}$ output layer ($S \in \{13,26,52\}$, $B=3$).
+                    </p>
+
+                    <aside class="notes">
+                        In the research paper, we introduce how we generate adversarial overlays using three adversarial loss functions. You can also test our attacks without using Turtlebot. 
+                    </aside>
+                    </section>
+
+                <section data-background-video="images/pc.mp4" data-background-video data-background-video-muted data-menu-title="Demo: Adversarial Detection">
+                    <aside class="notes">
+                        Here we demonstrate our attacks using a USB camera. For example, let's fabricate some objects at right top corner. Now, we have umbrella and person.  We open-sourced our system on Guthub.
+                    </aside>
+                </section>
+
+                <section data-menu-title="Chapter 3: The Main-in-the-Middle Attack">
+                    <h3>Chapter 3: The Man-in-the-Middle Attack</h3>
+                    <p class="" data-fragment-index="1" style="color: blue; font-size: 20px;">A Hardware Attack against Object Detection  &nbsp; <a href="https://ieeexplore.ieee.org/document/10186608"><i class="far fa-file-pdf"></i></a></p>
+                    <div class="r-vstack">
+                        <img class="" width="50%" src="images/demo.jpg">
+                    </div>
+                    <p style="font-size: 22px;"><i class="fab fa-github"></i> &nbsp; <a href="https://github.com/wuhanstudio/adversarial-camera">Source Code</a></p>
+                    <aside class="notes">
+                    </aside>
+                </section>
+
+                <section data-menu-title="Real-time Adversarial Attacks">
+                    <!-- <p class="" style="font-size: 35px;">Deep Learning: From Data Center to Edge Devices</p> -->
+                    <!-- <img src="images/data_center_edger.png" style="width: 65%; margin-bottom: 0;" alt=""> -->
+                    <!-- <span class="fragment r-fit-text">Intelligent robots possess a more comprehensive perception of environments.</span> -->
+                    <div class="r-vstack">
+                        <p style="font-size:0.8em">Deep learning models are vulnerable to adversarial attacks.</p>
+                        <img src="images/daedalus.png" style="width: 80%;" alt="">
+                    </div>
+                    <p style="font-size:0.6em" class="" data-fragment-index="1">To achieve <strong>real-time</strong> adversarial attacks, we need to solve two problems:</p>
+                    <ul>
+                        <li class="fragment" data-fragment-index="2">
+                            <span style="font-size:0.6em">How to generate the perturbation?</span><span class="fragment" data-fragment-index="4"  style="color:blue; font-size:0.6em"> (The PCB Attack)</span>
+                        </li>
+                        <li class="fragment" data-fragment-index="3">
+                            <span style="font-size:0.6em">How to apply the perturbation?</span><span class="fragment" data-fragment-index="5"  style="color:blue; font-size:0.6em"> (The Man-in-the-Middle Attack)</span>
+                        </li>
+                    </ul>
+                    <aside class="notes">
+                        Now, we see deep learning models are vulnerable to adversarial attacks, but to achieve real-time adversarial attacks, we need to solve two problems: how to generate the perturbation and how to apply the perturbation efficiently? <br />
+                        <br />
+                        We propose the PCB attack to generate the perturbation and the Man-in-the-Middle attack to apply the pertebation.
+                    </aside>
+                </section>
+
+                <section data-menu-title="Step 1: Generating the Perturbation">
+                    <h4 style="margin-top: 30px; margin-bottom: 10px;">Step 1: Generating the perturbation (The PCB Attack)</h4>
+                    <ul style="font-size: 20px;">
+                        <li>Objective:</li>
+                        $$ \min_{\mathcal{W}} \ \mathcal{L}_{train} = f(\mathcal{W}; x, \mathcal{O}) \;\;\;\; \max_{x} \ \mathcal{L}_{adv} = f(x; \mathcal{O}^{\ast}, \mathcal{W}) $$
+                        <li>Adversarial Loss:</li>
+                        $$ \mathcal{L}_{PC}(x) = \sum{\sigma(c_i) * \sigma(p_i)} \;\;\;\; \mathcal{L}_{PCB}(x) = \frac{\sum{(\sigma(c_i) * \sigma(p_i)}}{\sum{[\sigma(w_i) * \sigma(h_i)]^2}} $$
+                    </ul>
+                    <div class="r-hstack">
+                        <img src="images/pcb-specific.png" alt="" srcset="" style="margin-right: 20px;">
+                        <img src="images/pcb-agnostic.png" alt="" srcset="">
+                    </div>
+                    <aside class="notes">
+                        In the first step, we generate a single Universal Adversarial Perturbation to fool all the images from the camera. Our method generates more bounding boxes and has less variation. <br />
+                        <br />
+                        Prior research used the Mean Accuracy Precision to measure adversarial attacks, but it actually measures the accuracy of the model rather than the strength of the attack. Thus we propose three evaluation metrics to measure the strength of the attack, and we achieve a stronger attack after applying the learning rate decay.
+                    </aside>
+                </section>
+
+                <section data-menu-title="Step 1: Generating the Perturbation">
+                    <h4 style="margin-top: 30px; margin-bottom: 10px;">Step 1: Generating the perturbation (The PCB Attack)</h4>
+                    <div class="r-hstack">
+                        <p style="font-size: 25px;">Prior Research 
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            Our Method</p>
+                    </div>
+                    <div class="r-hstack">
+                        <video  autoplay muted width="35%">
+                            <source src="images/no_decay.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                          </video>
+                          &nbsp;&nbsp;&nbsp;&nbsp;
+                          <video  autoplay muted width="35%">
+                            <source src="images/with_decay.mp4" type="video/mp4">
+                            Your browser does not support the video tag.
+                          </video>
+                    </div>
+                    <div class="r-hstack">
+                        <p style="font-size: 20px;">No learning rate decay 
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+                            With learning rate decay</p>
+                    </div>
+                    <p style="font-size: 25px; margin-top: 0; margin-bottom: 0;" class=""> Our method generates more bounding boxes, and have less variation.</p>
+                    <img src="images/results.png" class="fragment" width="80%">
+                    
+                    <aside class="notes">
+                        In the first step, we generate a single Universal Adversarial Perturbation to fool all the images from the camera. Our method generates more bounding boxes and has less variation. <br />
+                        <br />
+                        Prior research used the Mean Accuracy Precision to measure adversarial attacks, but it actually measures the accuracy of the model rather than the strength of the attack. Thus we propose three evaluation metrics to measure the strength of the attack, and we achieve a stronger attack after applying the learning rate decay.
+                    </aside>
+                </section>
+
+                <section data-menu-title="Step 2: Applying the Perturbation">
+                    <!-- <p class="" style="font-size: 35px;">Deep Learning: From Data Center to Edge Devices</p> -->
+                    <!-- <img src="images/data_center_edger.png" style="width: 65%; margin-bottom: 0;" alt=""> -->
+                    <!-- <span class="fragment r-fit-text">Intelligent robots possess a more comprehensive perception of environments.</span> -->
+                    <div class="r-vstack">
+                        <h4>Step 2: Applying the perturbation (The Man-in-the-Middle Attack)</h4>
+                    </div>
+                    <br />
+                    <img src="images/attacks.jpg" width="100%">
+
+                    <aside class="notes">
+                        In the next step, to apply the perturbation, prior research introduced digital attack and physical attack. The digital attack requires access to the operating system, but hacking into the operating system is not trivial. The physical attack can print the perturbation on a poster, but the poster needs to be placed close to the camera. This is challenging for robotic applications in dynamic environments. <br />
+                        <br />
+                        We propose the hardware attack that injects the perturbation on the hardware level. The hardware attack does not assume access to the detection system and can inject perturbation to all input images captured by the camera.
+                    </aside>
+                </section>
+
+                <section data-background-video="images/demo.mp4" data-background-video data-background-video-muted data-menu-title="Demo Video">
+                    <aside class="notes">
+                        Here's a quick demo. We have a USB camera and a detection system. We used a raspberry pi version 4 to inject the perturbation. The raspberry pi reads the image from the USB camera, injects the perturbation, and then simulates a virtual camera to the detection system. The detection system has no idea that the image is manipulated.
+                    </aside>
+                </section>
+
+                <section data-background-video="images/attack.mp4" data-background-video data-background-video-muted>
+                    <aside class="notes">
+                        After injecting the perturbation, the detection system detects a large number of objects everywhere. Unbelievable! Right?
+                    </aside>
+                </section>
+
+                <section data-menu-title="Chapter 5: Adversarial Classification">
+                    <h3>Chaprer 5: Adversarial Classification</h3>
+                    <p class="" data-fragment-index="1" style="color: blue; font-size: 20px;">Distributed Black-box Attacks against Image Classification &nbsp; <a href="https://arxiv.org/abs/2210.16371"><i class="far fa-file-pdf"></i></a></p>
+                    <div class="r-vstack">
+                        <img class="" width="60%" src="images/distribution.jpg">
+                    </div>
+                    <p style="font-size: 22px;"><i class="fab fa-github"></i> &nbsp; <a href="https://github.com/wuhanstudio/adversarial-classification">Source Code</a></p>
+                    <aside class="notes">
+                    </aside>
+                </section>
+
+                
+                <section>
+                    <span class="menu-title" style="display: none">DeepAPI</span>
+                    <h3>DeepAPI - The Cloud API we attack</h3>
+                    <p style="font-size: 26px;">We open-source our image classification cloud service for research on black-box attacks.</p>
+
+                    <aside class="notes">
+                        The cloud API we attack is DeepAPI, an image classification cloud service we open-source for research on black-box attacks.
+                    </aside>
+                </section>
+
+                <section data-background-video="images/deepapi.mp4" data-background-video-muted data-menu-title="Demo: DeepAPI">
+                    <aside class="notes">
+                        Here's a quick demo. We can upload images to the cloud server, and receive the classification results.<br />
+                        <br />
+                        Besides uploading images from the website, we can also use the API to do image classification so that we can automate the query process to initiate black-box attacks. <br />
+                        <br />
+                    </aside>
+                </section>
+
+                <section>
+                    <h3 style="margin: 0;">DeepAPI Deployment</h3>
+                    <br />
+                    <p style="margin-top: 0;">Using Docker</p>
+                    <pre data-id="code">
+                        <code class="bash" data-trim data-line-numbers>
+                            $ docker run -p 8080:8080 wuhanstudio/deepapi
+                            Serving on port 8080...
+                        </code>
+                    </pre>
+                    <p>Using Pip</p>
+                    <pre data-id="code">
+                        <code class="bash" data-trim data-line-numbers>
+                            $ pip install deepapi
+
+                            $ python -m deepapi
+                            Serving on port 8080...
+                        </code>
+                    </pre>
+
+                    <aside class="notes">
+                        To make the deployment of DeepAPI easier, we provide a Docker image as well as a python package which can be installed via pip install deepapi, and start the server using a single command. <br />
+                        <br/>
+                        Furthermore, we design two general frameworks, horizontal and vertical distribution, that can be applied to existing black-box attacks to reduce the total attack time. (5 min)
+                    </aside>
+                </section>
+
+                <section data-background-video="images/bat.mp4" data-background-video-muted data-menu-title="Demo: BAT">
+                </section>
+    
+                <section>
+                    <h3>How to accelerate Black-Box attacks?</h3>
+                    <div class="r-hstack">
+                        <img src="images/query.png" class="fragment" alt="" width="120%" style="margin-right: 20px;">
+                        <img src="images/average_query_time.png" class="fragment" alt="" width="80%">
+                    </div>
+                    <p style="font-size: 22px;" class="fragment"> Cloud APIs are deployed behind a load balancer that distributes the traffic across several servers.</p>
+                    <aside class="notes">
+                        Well, how can we accelerate Black-Box attacks? <br />
+                        <br />
+                        Black-box attacks rely on queries, which is time consuming. Our experimental results demonstrate that sending out 10 queries concurrently takes roughly the same time as sending out 1 query, which means that we can accelerate black-box attacks by sending out queries concurrently. The more queries we send, the less time each query takes in average. <br />
+                        <br />
+                        This is because modern cloud APIs are usually deployed behind a load balancer. The load balancer distributes the traffic across several servers, thus we can get query results of multiple concurrent requests simultaneously. (2min) <br />
+                        <br />
+                        Before introducing the cloud service we attack, we notice that ...
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>Local Models & Cloud APIs</h3>
+                    <div class="r-vstack">
+                        <div class="">
+                            <img src="images/local.jpg" width="100%" />
+                            <p style="font-size: 26px;">Most prior research used local models to test black-box attacks.</p>
+                        </div>
+                        <div class="fragment">
+                            <img src="images/cloudapi.jpg" width="100%" />
+                            <p style="font-size: 26px;">We initiate the black-box attacks directly against cloud services.</p>
+                        </div>
+                    </div>
+
+                    <aside class="notes">
+                        Most prior research used local models to test black-box attacks because sending queries to cloud services is slow, while querying a local model with GPU acceleration is much faster. <br />
+                        <br />
+                        However, testing black-box attacks against local models could introduce several mistakes in the query process that gave their methtods an unfair advantage. For example, prior research usually resizes input images to be the same shape as the model input and then applies the perturbation, which means they assume they have access to the input shape of the model. Some methods outperformed the state-of-the-art partially because these mistakes gave them access to information that should not be assumed to be available in black-box attacks. <br />
+                        <br />
+                        As a result, we initiate black-box attacks directly against cloud services to avoid making similar mistakes, and we apply the perturbation directly to the original input image. (3min)
+                    </aside>
+                </section>
+
+                <section>
+                    <span class="menu-title" style="display: none">Cloud APIs vs Local Models</span>
+                    <h3 class="r-fit-text">Attacking Cloud APIs is more challenging than attacking local models</h3>
+                    <div class="r-vstack">
+                        <div class="">
+                            <img src="images/success_rate.png" alt="" width="90%" style="margin-bottom: 0;">
+                            <p style="font-size: 20px; margin: 0;">Attacking cloud APIs achieve less success rate than attacking local models.</p>
+                        </div>
+                        <div class="fragment">
+                            <img src="images/number_of_queries.png" alt="" width="90%" style="margin-bottom: 0;">
+                            <p style="font-size: 20px; margin: 0;">Attacking cloud APIs requires more queries than attacking local models.</p>
+                        </div>
+                    </div>
+
+                    <aside class="notes">
+                        Our experimental results demonstrate that attacking Cloud APIs is more challenging than attacking local models. For local search and gradient estimation methods, attacking cloud APIs achieve less success rate than attacking local models. In our experiments, we limit the number of queries for each image to be at most 1,000, which is quite challenging. As a result, the baseline method only achieves a success rate of roughly 5%. <br />
+                        <br />
+                        Besides, attacking cloud APIs requires more queries than attacking local models. For the baseline method, we do not see an evident incrase because the attack success rate is relatively low. Most attacks consume all of the query budget. 
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>Horizontal Distribution</h3>
+                    <div class="r-hstack">
+                        <img src="images/horizontal.png" width="80%" />
+                        <img src="images/horizon.jpg" width="100%" />
+                    </div>
+
+                    <aside class="notes">
+                        Horizontal Distribuion sends out concurrent queries across images at the same iteration, so we receive the query results for different images simultaneously, and then move on to the next iteration. <br />
+                        <br />
+                        The benefit of horizontal distribution is that we do not need to redesign the black-box attacks, we only need to replace the original model query with concurrent queries. <br />
+                    </aside>
+                </section>
+
+                <section>
+                    <div class="r-hstack">
+                        <img src="images/horizontal_time.png" width="100%" />
+                        <!-- <img src="images/simba_attack_horizontal_time.png" width="100%" /> -->
+                        <!-- <img src="images/square_attack_horizontal_time.png" width="100%" /> -->
+                        <!-- <img src="images/bandits_attack_horizontal_time.png" width="100%" /> -->
+                    </div>
+                    <p style="font-size: 30px;">Horizontal distribution reduces the total attack time by a factor of five.</p>
+
+                    <aside class="notes">
+                        After applying horizontal distribution, we can see that the total attack time is reduced by a factor of five. The total time of attacking 100 images was reduced from over 20h to 4h. <br />
+                    </aside>
+                </section>
+
+                <section>
+                    <h3>Vertical Distribution</h3>
+                    <div class="r-hstack">
+                        <img src="images/vertical.png" width="70%" />
+                        <img src="images/vertical.jpg" width="100%" />
+                    </div>
+
+                    <aside class="notes">
+                        On the other side, vertical distribution sends out concurrent queries across iterations for the same image. For each image, we generate multiple adversarial perturbations and send out queries concurrently across iterations. <br />
+                        <br />
+                        For vertical distribution, we need to redesign the black-box attacks to decouple the queries across iterations. <br /> 
+                        <br />
+                        In the research paper, we use both local search and gradient estimation methods as examples to illustrate how to re-design the algorithm to apply vertical distribution.<br /> 
+                    </aside>
+                </section>
+
+                <section>
+                    <div class="r-hstack">
+                        <img src="images/vertical_margin.png" width="100%" />
+                        <!-- <img src="images/simba_attack_vertical_margin.png" width="100%" /> -->
+                        <!-- <img src="images/square_attack_vertical_margin.png" width="100%" /> -->
+                        <!-- <img src="images/bandits_attack_vertical_margin.png" width="100%" /> -->
+                    </div>
+                    <p style="font-size: 30px;">Vertical distribution achieves succeesful attacks much earlier.</p>
+
+                    <aside class="notes">
+                        After applying vertical distribution, besides reducing the attack time, both local search and gradient estimation methods achieve early successful attacks. The probability of the original predicted class drops faster. <br />
+                    </aside>
+                </section>
+
+                <section data-auto-animate>
+                    <span class="menu-title" style="display: none">Conclusion</span>
+                    <h4>Conclusion</h4>
+                    <div class="r-vstack">
+                        <img class="" src="images/distribution.jpg" width="100%"> 
+                        <img class="fragment" src="images/deepapi.png" width="100%"> 
+                    </div>
+
+                    <aside class="notes">
+                        In conclusion, our research demonstrates that it is possible to exploit load balancing to accelerate online black-box attacks against cloud services. <br />
+                        <br />
+                        And we open source our image classification cloud service to facilitate future research on distributed black-box attacks to test if black-box attacks have become a practical threat against machine learning models deployed on cloud servers. <br />
+                        <br />
+                    </aside>
+                </section>
+
+                <section data-menu-title="Chapter 6: Interpretation Methods">
+                    <h3>Chaprer 6: Interpretation Methods</h3>
+                    <p class="" data-fragment-index="1" style="color: blue; font-size: 20px;">Interpretable Machine Learning for COVID-19 Severity Prediction. &nbsp; <a href="https://ieeexplore.ieee.org/document/9465748"><i class="far fa-file-pdf"></i></a></p>
+                    <div class="r-vstack">
+                        <img class="" width="60%" src="images/interpretable-ml-covid19.jpg">
+                    </div>
+                    <p style="font-size: 22px;"><i class="fab fa-github"></i> &nbsp; <a href="https://github.com/wuhanstudio/interpretable-ml-covid-19">Source Code</a></p>
+                    <aside class="notes">
+                    </aside>
+                </section>
+                
+                <section data-menu-title="Demo: Interpretation Methods">
+                    <video controls data-autoplay src="images/covid.mp4"></video>
                 </section>
 
                 <section>
