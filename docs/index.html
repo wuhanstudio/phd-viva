@@ -32,6 +32,16 @@
                     <span class="menu-title" style="display: none">Title</span>
                     <h3>Is Deep Learning Secure?</h3>
                     <p class="blockquote-footer name" style="font-size: 25px;">Han Wu, University of Exeter</p>
+
+                    <aside class="notes">
+                        Well, let's get started. My PhD research focuses on the question: Is Deep Learning Secure?
+                        <br/><br/>
+                        Deep learning models have been widely adopted in safety-critical applications, such as autonomous driving and medical applications. Unfortunately, deep neural networks are vulneralbe to adversarial attacks.
+                        <br/><br/>
+                        My PhD thesis introduces several practical adversarial attacks and how to understand deep learning models using interpretation methods.
+                        <br/><br/>
+                        To answer the research question ...
+                    </aside>
                 </section>
 
                 <section data-auto-animate data-banner="Practical Adversarial Attacks and Interpretation Methods for Deep Learning Models">
@@ -79,6 +89,19 @@
                     </div>
 
                     <aside class="notes">
+                        First, I worked on white-box attacks, which means we have full access to the target model. I'll show you a quick demo. 
+                        <br /><br />
+                        In this demo, we add the adversarial perturbation to the image. We can also inject the perturbation using a hardware attack. 
+                        <br /><br />
+                        Now we know that deep learning models are vulnerable to adversarial attacks, and the attack can achieve real-time performance. But when I started my PhD project, I didn't know if the attack could achieve a real-time performance. So I started my research by attacking an end-to-end driving model.
+                        <br /><br />
+                        After attacking the end-to-end driving model and object detection model, I moved on to tracking models. Tracking models are combinations of deep learning models and traditional algorithms, such as Kalman Filter. Although deep learning models are vulnerable to adversarial attacks, traditional algotithms are not. So I'd like to investigate if traditional algorithms, such as the Kalman Filter can alliviate the impact of adversarial attack. Unfortunately, it cannot. We can still attack object tracking models in real time.
+                        <br /><br />
+                        All the attacks are white-box attacks, which means we have full access to the target model. What if we do not have access to model structures? In chapter 5, I introduce distributed black-box attacks against image classification models. 
+                        <br /><br />
+                        Now I have demonstrated both white-box attacks and black-box attacks. Here's another question. Why? Human eyes are not vulnerable to these attacks. We can make correct predictions. So we need to understand how deep learning models make predictions. In Chapter 6, I used interpretation methods to understand how deep learning models make predictions.
+                        <br /><br />
+                        Thank you. This is the end of my presentation. I hope the presentation gives you a better understanding of my Ph.D. research.
                     </aside>
                 </section>
 
@@ -89,6 +112,7 @@
                         <img class="" width="40%" src="images/overview.png">
                     </div>
                     <p style="font-size: 22px;"><i class="fab fa-github"></i> &nbsp; <a href="https://github.com/wuhanstudio/adversarial-driving">Source Code</a></p>
+
                     <aside class="notes">
                     </aside>
                 </section>
